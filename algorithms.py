@@ -74,15 +74,23 @@ def merge_sort(arr):
 
 def insertion_sort(arr):
     arr = arr.copy()
+    steps = []
 
     for i in range(1, len(arr)):
         key = arr[i]
         j = i - 1
 
+        steps.append({'type': 'extract', 'index': i, 'array': arr.copy()})
+
         while j >= 0 and key < arr[j]:
+            steps.attend({'type': 'comparison', 'indices': (j, j + 1), 'array': arr.copy()})
+
             arr[j + 1] = arr[j]
+            steps.append({'type': 'shift', 'indices': (j, j + 1), 'array': arr.copy()})
+
             j -= 1
 
         arr[j + 1] = key
+        steps.append({'type': 'insert', 'index': j + 1, 'array': arr.copy()})
 
-    return arr
+    return arr, steps
