@@ -40,25 +40,37 @@ def selection_sort(arr):
 
     return arr, steps
 
-def merge(left, right):
+def merge(left, right, steps):
     result = []
     i = j = 0
 
     while i < len(left) and j < len(right):
+        steps.append({'type': 'comparison', 'left_value': left[i], 'right_value': right[j], 'result': result.copy()})
+
         if left[i] < right[j]:
             result.append(left[i])
+            steps.append({'type': 'append', 'value': left[i], 'result': result.copy()})
             i += 1
         else:
             result.append(right[j])
+            steps.append({'type': 'append', 'value': right[j], 'result': result.copy()})
             j += 1
 
-    result.extend(left[i:])
-    result.extend(right[j:])
+    while i < len(left):
+        result.append(left[i])
+        steps.append({'type': 'append', 'value': left[i], 'result': result.copy()})
+        i += 1
+    
+    while j < len(right):
+        result.append(right[j])
+        steps.append({'type': 'append', 'value': left[i], 'result': result.copy()})
+        j += 1
 
     return result
 
 def merge_sort(arr):
     arr = arr.copy()
+    steps = []
 
     if len(arr) <= 1:
         return arr
@@ -67,10 +79,15 @@ def merge_sort(arr):
     left = arr[:mid]
     right = arr[mid:]
 
+    steps.append({'type': 'split', 'left': left.copy(), 'right': right.copy()})
+
     left = merge_sort(left)
     right = merge_sort(right)
 
-    return merge(left, right)
+    merged = merge(left, right)
+    steps.append({'type': 'merge_complete', 'merged': merged.copy()})
+
+    return merged
 
 def insertion_sort(arr):
     arr = arr.copy()
