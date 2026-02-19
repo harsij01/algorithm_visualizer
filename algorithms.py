@@ -52,6 +52,8 @@ def merge(left, right):
     return result
 
 def merge_sort(arr):
+    arr = arr.copy()
+
     if len(arr) <= 1:
         return arr
     
@@ -64,4 +66,17 @@ def merge_sort(arr):
 
     return merge(left, right)
 
-print(merge_sort([1, 6, 3, 29, 7, 30, 15, 2]))
+def insertion_sort(arr):
+    arr = arr.copy()
+
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+
+        while j >= 0 and key < arr[j]:
+            arr[j + 1] = arr[j]
+            j -= 1
+
+        arr[j + 1] = key
+
+    return arr
