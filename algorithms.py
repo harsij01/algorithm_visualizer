@@ -12,7 +12,7 @@ def bubble_sort(arr):
             if arr[j] > arr[j + 1]:
                 arr[j], arr[j + 1] = arr[j + 1], arr[j]
                 swapped = True
-                steps.append({'type': 'step', 'indices': (j, j + 1), 'array': arr.copy()})
+                steps.append({'type': 'swap', 'indices': (j, j + 1), 'array': arr.copy()})
         
         if not swapped:
             break
@@ -22,17 +22,23 @@ def bubble_sort(arr):
 def selection_sort(arr):
     arr = arr.copy()
     n = len(arr)
+    steps = []
 
     for i in range(n - 1):
         min_index = i
 
         for j in range(i + 1, n):
+            steps.append({'type': 'comparison', 'indices': (j,min_index), 'array': arr.copy()})
+
             if arr[j] < arr[min_index]:
                 min_index = j
+                steps.append({'type': 'change_min_index', 'index': min_index, 'array': arr.copy()})
 
-        arr[min_index], arr[i] = arr[i], arr[min_index]
+        if min_index != i:
+            arr[min_index], arr[i] = arr[i], arr[min_index]
+            steps.append({'type': 'swap', 'indices': (min_index, i), 'array': arr.copy()})
 
-    return arr
+    return arr, steps
 
 def merge(left, right):
     result = []
