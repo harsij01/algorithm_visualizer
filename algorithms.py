@@ -18,3 +18,18 @@ def bubble_sort(arr):
             break
 
     return arr, steps
+
+def selection_sort(arr):
+    arr = arr.copy()
+    n = len(arr)
+
+    for i in range(n - 1):
+        min_index = i
+
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_index]:
+                min_index = j
+
+        arr[min_index], arr[i] = arr[i], arr[min_index]
+
+    return arr
