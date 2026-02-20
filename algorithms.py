@@ -129,9 +129,3 @@ def insertion_sort(arr, track_steps=True):
             steps.append({'type': 'insert', 'index': j + 1, 'array': arr.copy()})
 
     return arr, steps
-
-arr = [6, 9, 34, 19, 63, 6, 0, 32]
-
-start = time.perf_counter()
-selection_sort(arr, track_steps=False)
-end = time.perf_counter()
