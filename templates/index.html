@@ -5,8 +5,6 @@
         <title>Algorithm Visualizer</title>
     </head>
     <body>
-        <input type="text" id="arrayInput" placeholder="Enter numbers separated by commas">
-
         <select id="algorithmSelect">
             <option value="bubble">Bubble</option>
             <option value="selection">Selection</option>
@@ -19,6 +17,12 @@
             <option value="benchmark">Benchmark</option>
         </select>
 
+        <input type="text" id="arrayInput" placeholder="Enter numbers separated by commas">
         <button onclick="sendArray()"">Sort</button>
+
+        <input type="number" id="arraySize" placeholder="Size" value="20">
+        <input type="number" id="maxValue" placeholder="Max Value" value="100">
+
+        <button onclick="generateRandom()">Generate Random</button>
     </body>
 </html>
