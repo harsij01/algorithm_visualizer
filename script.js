@@ -1,9 +1,6 @@
-function sendArray() {
-    const input = document.getElementById("arrayInput").value;
+function runSort(array) {
     const algorithm = document.getElementById("algorithmSelect").value;
     const mode = document.getElementById("modeSelect").value;
-
-    const array = input.split('/[\s,]+/').map(num => Number(num.trim())).filter(num => !isNaN(num));
 
     fetch("/sort", {
         method: "POST",
@@ -19,5 +16,24 @@ function sendArray() {
     .then(res => res.json())
     .then(data => {
         console.log(data);
-    });
+    });    
+}
+
+function sendArray() {
+    const input = document.getElementById("arrayInput").value;
+
+    const array = input.split(/[\s,]+/).map(num => Number(num.trim())).filter(num => !isNaN(num));
+    runSort(array);
+}
+
+function generateRandom() {
+    const size = Number(document.getElementById("arraySize").value);
+    const maxValue = Number(document.getElementById("maxValue").value);
+
+    const array = Array.from({ length: size }, () =>
+        Math.floor(Math.random() * maxValue)
+    );
+
+    document.getElementById("arrayInput").value = array.join(",");
+    runSort(array)
 }
