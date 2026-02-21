@@ -4,31 +4,56 @@ import time
 
 app = Flask(__name__)
 
-@app.route('/sort/<algorithm>', methods=["POST"])
-def run_selection(algorithm):
+algorithms = {
+    "bubble": bubble_sort,
+    "selection": selection_sort,
+    "insertion": insertion_sort,
+    "merge": merge_sort
+}
+
+@app.route("/sort", methods=["POST"])
+def sort_handler():
     data = request.get_json()
-    arr = data["array"]
+
+    arr = data.get("array")
+    algorithm = data.get("algorithm")
     mode = data.get("mode", "visual")
+
+    if not isinstance(arr, list):
+        return jsonify({"error": "Array must be a list"}), 400
+
+    if not all(isinstance(x, (int, float)) for x in arr):
+        return jsonify({"error": "Array must contain only numbers"}), 400
+
+    if algorithm not in algorithms:
+        return jsonify({"error": "Invalid algorithm"}), 400
+
     track_steps = True if mode == "visual" else False
 
-    start =  time.perf_counter()
+    sort_function = algorithms[algorithm]
 
-    if algorithm == "bubble":
-        result = bubble_sort(arr, track_steps)
-    elif algorithm == "selection":
-        result = selection_sort(arr, track_steps)
-    elif algorithm == "insertion":
-        result = insertion_sort(arr, track_steps)
-    elif algorithm == "merge":
-        result = merge_sort(arr, track_steps)
-
+    start = time.perf_counter()
+    result = sort_function(arr, track_steps)
     end = time.perf_counter()
 
     runtime = end - start
 
     if track_steps:
-        return jsonify({"sorted_array": result[0], "steps": result[1]})
-    return jsonify({"sorted_array": result[0], "runtime": runtime})
+        sorted_arr, steps = result
+        return jsonify({
+            "original_array": arr,
+            "sorted_array": sorted_arr,
+            "steps": steps,
+            "runtime": runtime
+        })
+
+    else:
+        sorted_arr = result
+        return jsonify({
+            "original_array": arr,
+            "sorted_array": sorted_arr,
+            "runtime": runtime
+        })
 
 if __name__ == "__main__":
     app.run()
