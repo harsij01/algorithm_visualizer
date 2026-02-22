@@ -6,7 +6,7 @@ function renderBars(array) {
         const bar = document.createElement("div");
 
         bar.style.height = value * 3 + "px";
-        bar.style.width = "20px";
+        bar.style.flex = "1";
         bar.style.margin = "2px";
         bar.style.backgroundColor = "steelblue";
 
@@ -29,9 +29,17 @@ function runSort(array) {
             mode: mode
         })
     })
+
     .then(res => res.json())
     .then(data => {
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
         renderBars(data.sorted_array);
+    })
+    .catch(error => {
+        console.error("Error:", error);
     });
 }
 
@@ -39,6 +47,12 @@ function sendArray() {
     const input = document.getElementById("arrayInput").value;
 
     const array = input.split(/[\s,]+/).map(num => Number(num.trim())).filter(num => !isNaN(num));
+
+    if (array.length === 0) {
+        alert("Please enter valid numbers.");
+        return;
+    }
+
     runSort(array);
 }
 
