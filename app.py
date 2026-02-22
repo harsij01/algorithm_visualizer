@@ -15,6 +15,9 @@ algorithms = {
 def sort_handler():
     data = request.get_json()
 
+    if not data:
+        return jsonify({"error": "No JSON data provided"}), 400
+
     arr = data.get("array")
     algorithm = data.get("algorithm")
     mode = data.get("mode", "visual")
@@ -24,11 +27,17 @@ def sort_handler():
 
     if not all(isinstance(x, (int, float)) for x in arr):
         return jsonify({"error": "Array must contain only numbers"}), 400
+    
+    if len(arr) > 1000:
+        return jsonify({"error": "Array too large"}), 400
 
     if algorithm not in algorithms:
         return jsonify({"error": "Invalid algorithm"}), 400
 
-    track_steps = True if mode == "visual" else False
+    if mode not in ["visual", "benchmark"]:
+        return jsonify({"error": "Invalid mode"}), 400
+
+    track_steps = (mode == "visual")
 
     sort_function = algorithms[algorithm]
 
@@ -56,4 +65,4 @@ def sort_handler():
         })
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
