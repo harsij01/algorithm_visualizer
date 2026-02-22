@@ -15,7 +15,8 @@ function runSort(array) {
     })
     .then(res => res.json())
     .then(data => {
-        console.log(data);
+        document.getElementById("resultText").innerText =
+            "Sorted Array: " + data.sorted_array.join(", ");
     });    
 }
 
