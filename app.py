@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from algorithms import bubble_sort, selection_sort, merge_sort, insertion_sort
 import time
 
@@ -10,6 +10,10 @@ algorithms = {
     "insertion": insertion_sort,
     "merge": merge_sort
 }
+
+@app.route("/")
+def index():
+    return render_template("sort.html")
 
 @app.route("/sort", methods=["POST"])
 def sort_handler():
