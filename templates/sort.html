@@ -3,29 +3,33 @@
     <head>
         <meta name="viewport" content="initial-scale=1, width=device-width">
         <title>Algorithm Visualizer</title>
-        <link rel="stylesheet" href="../static/style.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
-        <select id="algorithmSelect">
-            <option value="bubble">Bubble</option>
-            <option value="selection">Selection</option>
-            <option value="insertion">Insertion</option>
-            <option value="merge">Merge</option>
-        </select>
+        <div class="controls">
+            <select id="algorithmSelect">
+                <option value="bubble">Bubble</option>
+                <option value="selection">Selection</option>
+                <option value="insertion">Insertion</option>
+                <option value="merge">Merge</option>
+            </select>
 
-        <select id="modeSelect">
-            <option value="visual">Visual</option>
-            <option value="benchmark">Benchmark</option>
-        </select>
+            <select id="modeSelect">
+                <option value="visual">Visual</option>
+                <option value="benchmark">Benchmark</option>
+            </select>
 
-        <input type="text" id="arrayInput" placeholder="Enter numbers separated by commas">
-        <button onclick="sendArray()"">Sort</button>
+            <input type="text" id="arrayInput" placeholder="Enter numbers separated by commas">
+            <button onclick="sendArray()">Sort</button>
 
-        <input type="number" id="arraySize" placeholder="Size" value="20">
-        <input type="number" id="maxValue" placeholder="Max Value" value="100">
+            <input type="number" id="arraySize" placeholder="Size" value="20">
+            <input type="number" id="maxValue" placeholder="Max Value" value="100">
 
-        <button onclick="generateRandom()">Generate Random</button>
+            <button onclick="generateRandom()">Generate Random</button>
+        </div>
 
-        <div id="barContainer" style="display: flex; align-items: flex-end; height: 200px;"></div>
+        <div id="barContainer"></div>
+
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
     </body>
 </html>
