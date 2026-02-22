@@ -1,3 +1,19 @@
+function renderBars(array) {
+    const container = document.getElementById("barContainer");
+    container.innerHTML = "";
+
+    array.forEach(value => {
+        const bar = document.createElement("div");
+
+        bar.style.height = value * 3 + "px";
+        bar.style.width = "20px";
+        bar.style.margin = "2px";
+        bar.style.backgroundColor = "steelblue";
+
+        container.appendChild(bar);
+    });
+}
+
 function runSort(array) {
     const algorithm = document.getElementById("algorithmSelect").value;
     const mode = document.getElementById("modeSelect").value;
@@ -15,9 +31,8 @@ function runSort(array) {
     })
     .then(res => res.json())
     .then(data => {
-        document.getElementById("resultText").innerText =
-            "Sorted Array: " + data.sorted_array.join(", ");
-    });    
+        renderBars(data.sorted_array);
+    });
 }
 
 function sendArray() {
