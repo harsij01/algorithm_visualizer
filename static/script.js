@@ -1,6 +1,6 @@
 const DEFAULT_SPEED = 200; // milliseconds between steps
 
-function renderBars(array, highlight = {}) {
+function renderStep(array, highlight = {}) {
     const container = document.getElementById("barContainer");
     container.innerHTML = "";
 
@@ -11,10 +11,13 @@ function renderBars(array, highlight = {}) {
         bar.style.margin = "2px";
         bar.style.backgroundColor = "steelblue";
 
-        // Highlight based on step
+        // highlight multiple indices
         if (highlight.indices && highlight.indices.includes(index)) {
             bar.style.backgroundColor = highlight.color;
-        } else if (highlight.index === index) {
+        }
+
+        // highlight single index
+        if (highlight.index === index) {
             bar.style.backgroundColor = highlight.color;
         }
 
@@ -55,7 +58,7 @@ async function animateSteps(steps, speed = DEFAULT_SPEED) {
                 break;
         }
 
-        renderBars(arrayToRender, highlight);
+        renderStep(arrayToRender, highlight);
         await new Promise(resolve => setTimeout(resolve, speed));
     }
 }
