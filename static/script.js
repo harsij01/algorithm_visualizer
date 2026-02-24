@@ -68,3 +68,33 @@ async function animateSteps(steps) {
         await new Promise(resolve => setTimeout(resolve, 200)); // 200ms delay
     }
 }
+
+function renderStep(step) {
+    const container = document.getElementById("barContainer");
+    container.innerHTML = ""; // clear previous bars
+
+    const array = step.array || step.merged || []; // support different step types
+
+    array.forEach((value, index) => {
+        const bar = document.createElement("div");
+        bar.style.height = value * 3 + "px";
+        bar.style.flex = "1";
+        bar.style.margin = "2px";
+        bar.style.backgroundColor = "steelblue";
+
+        // Highlight bars based on step type
+        if (step.type === "comparison" && step.indices) {
+            if (index === step.indices[0] || index === step.indices[1]) {
+                bar.style.backgroundColor = "red";
+            }
+        } else if (step.type === "swap" && step.indices) {
+            if (index === step.indices[0] || index === step.indices[1]) {
+                bar.style.backgroundColor = "orange";
+            }
+        } else if (step.type === "insert" && index === step.index) {
+            bar.style.backgroundColor = "green";
+        }
+
+        container.appendChild(bar);
+    });
+}
