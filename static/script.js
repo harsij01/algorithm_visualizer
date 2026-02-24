@@ -20,27 +20,20 @@ function runSort(array) {
 
     fetch("/sort", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            array: array,
-            algorithm: algorithm,
-            mode: mode
-        })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ array, algorithm, mode })
     })
-
     .then(res => res.json())
-    .then(data => {
-        if (data.error) {
-            alert(data.error);
-            return;
+    .then(async data => {
+        if (data.error) { alert(data.error); return; }
+
+        if (mode === "visual" && data.steps) {
+            await animateSteps(data.steps);
+        } else {
+            renderBars(data.sorted_array);
         }
-        renderBars(data.sorted_array);
     })
-    .catch(error => {
-        console.error("Error:", error);
-    });
+    .catch(error => { console.error("Error:", error); });
 }
 
 function sendArray() {
