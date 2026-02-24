@@ -51,6 +51,14 @@ def merge_sort(arr, track_steps=False):
     def _merge_sort(left, right):
         if left >= right:
             return
+        
+        if track_steps:
+            steps.append({
+                "type": "active_range",
+                "range": [left, right],
+                "array": arr.copy(),
+                "subarray": arr[left:right+1]
+            })
 
         mid = (left + right) // 2
 

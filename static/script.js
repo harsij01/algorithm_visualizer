@@ -1,4 +1,4 @@
-const DEFAULT_SPEED = 200; // milliseconds between steps
+const DEFAULT_SPEED = 400; // milliseconds between steps
 
 function renderStep(array, highlight = {}) {
     const container = document.getElementById("barContainer");
@@ -8,8 +8,15 @@ function renderStep(array, highlight = {}) {
         const bar = document.createElement("div");
         bar.style.height = value * 3 + "px";
         bar.style.flex = "1";
-        bar.style.margin = "2px";
+        bar.style.margin = "0";
         bar.style.backgroundColor = "steelblue";
+
+        // Highlight range
+        if (highlight.range) {
+            if (index >= highlight.range[0] && index <= highlight.range[1]) {
+                bar.style.backgroundColor = highlight.color;
+            }
+        }
 
         // highlight multiple indices
         if (highlight.indices && highlight.indices.includes(index)) {
@@ -25,6 +32,30 @@ function renderStep(array, highlight = {}) {
     });
 }
 
+function renderSubArray(fullArrayLength, range, subarray) {
+    const container = document.getElementById("subContainer");
+    container.innerHTML = "";
+
+    for (let i = 0; i < fullArrayLength; i++) {
+
+        const bar = document.createElement("div");
+        bar.style.flex = "1";
+
+        // If index is inside active range
+        if (range && i >= range[0] && i <= range[1]) {
+            const value = subarray[i - range[0]];
+            bar.style.height = value * 3 + "px";
+            bar.style.backgroundColor = "orange";
+        } else {
+            // Empty placeholder
+            bar.style.height = "0px";
+            bar.style.backgroundColor = "transparent";
+        }
+
+        container.appendChild(bar);
+    }
+}
+
 async function animateSteps(steps, speed = DEFAULT_SPEED) {
     for (const step of steps) {
         let arrayToRender = [];
@@ -36,25 +67,38 @@ async function animateSteps(steps, speed = DEFAULT_SPEED) {
 
         // Set highlight based on step type
         let highlight = {};
+
         switch (step.type) {
             case "comparison":
-                if (step.indices) highlight = { indices: step.indices, color: "red" };
+                if (step.indices)
+                    highlight = { indices: step.indices, color: "red" };
                 break;
+
             case "swap":
-                if (step.indices) highlight = { indices: step.indices, color: "orange" };
+                if (step.indices)
+                    highlight = { indices: step.indices, color: "orange" };
                 break;
+
             case "insert":
             case "extract":
                 highlight = { index: step.index, color: "green" };
                 break;
+
             case "shift":
-                if (step.indices) highlight = { indices: step.indices, color: "purple" };
+                if (step.indices)
+                    highlight = { indices: step.indices, color: "purple" };
                 break;
+
             case "append":
                 highlight = { index: arrayToRender.length - 1, color: "blue" };
                 break;
-            case "merge_complete":
-                highlight = {}; // optional: color all bars differently if you want
+
+            case "active_range":
+                renderSubArray(
+                    step.array.length,
+                    step.range,
+                    step.subarray
+                );
                 break;
         }
 
