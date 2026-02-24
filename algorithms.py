@@ -47,61 +47,54 @@ def selection_sort(arr, track_steps=True):
 
     return arr, steps
 
-def merge(left, right, steps, track_steps=True):
-    result = []
-    i = j = 0
-
-    while i < len(left) and j < len(right):
-        if track_steps:
-            steps.append({'type': 'comparison', 'left_value': left[i], 'right_value': right[j], 'result': result.copy()})
-
-        if left[i] < right[j]:
-            result.append(left[i])
-            if track_steps:
-                steps.append({'type': 'append', 'value': left[i], 'result': result.copy()})
-            i += 1
-        else:
-            result.append(right[j])
-            if track_steps:
-                steps.append({'type': 'append', 'value': right[j], 'result': result.copy()})
-            j += 1
-
-    while i < len(left):
-        result.append(left[i])
-        if track_steps:
-            steps.append({'type': 'append', 'value': left[i], 'result': result.copy()})
-        i += 1
-    
-    while j < len(right):
-        result.append(right[j])
-        if track_steps:
-            steps.append({'type': 'append', 'value': left[i], 'result': result.copy()})
-        j += 1
-
-    return result
-
 def merge_sort(arr, track_steps=True):
     arr = arr.copy()
     steps = []
 
-    if len(arr) <= 1:
-        return arr
-    
-    mid = len(arr) // 2
-    left = arr[:mid]
-    right = arr[mid:]
+    def _merge_sort(sub_arr):
+        if len(sub_arr) <= 1:
+            return sub_arr
 
-    if track_steps:
-        steps.append({'type': 'split', 'left': left.copy(), 'right': right.copy()})
+        mid = len(sub_arr) // 2
+        left = _merge_sort(sub_arr[:mid])
+        right = _merge_sort(sub_arr[mid:])
 
-    left = merge_sort(left)
-    right = merge_sort(right)
+        merged = []
+        i = j = 0
 
-    merged = merge(left, right, track_steps=track_steps)
-    if track_steps:
-        steps.append({'type': 'merge_complete', 'merged': merged.copy()})
+        while i < len(left) and j < len(right):
+            if track_steps:
+                steps.append({'type': 'comparison', 'left': left[i], 'right': right[j], 'merged': merged.copy()})
+            if left[i] < right[j]:
+                merged.append(left[i])
+                if track_steps:
+                    steps.append({'type': 'append', 'value': left[i], 'merged': merged.copy()})
+                i += 1
+            else:
+                merged.append(right[j])
+                if track_steps:
+                    steps.append({'type': 'append', 'value': right[j], 'merged': merged.copy()})
+                j += 1
 
-    return merged
+        while i < len(left):
+            merged.append(left[i])
+            if track_steps:
+                steps.append({'type': 'append', 'value': left[i], 'merged': merged.copy()})
+            i += 1
+
+        while j < len(right):
+            merged.append(right[j])
+            if track_steps:
+                steps.append({'type': 'append', 'value': right[j], 'merged': merged.copy()})
+            j += 1
+
+        if track_steps:
+            steps.append({'type': 'merge_complete', 'merged': merged.copy()})
+
+        return merged
+
+    sorted_arr = _merge_sort(arr)
+    return sorted_arr, steps
 
 def insertion_sort(arr, track_steps=True):
     arr = arr.copy()
@@ -116,7 +109,7 @@ def insertion_sort(arr, track_steps=True):
 
         while j >= 0 and key < arr[j]:
             if track_steps:
-                steps.attend({'type': 'comparison', 'indices': (j, j + 1), 'array': arr.copy()})
+                steps.append({'type': 'comparison', 'indices': (j, j + 1), 'array': arr.copy()})
 
             arr[j + 1] = arr[j]
             if track_steps:
