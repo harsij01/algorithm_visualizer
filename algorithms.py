@@ -1,5 +1,3 @@
-import time
-
 def bubble_sort(arr, track_steps=True):
     arr = arr.copy()
     n = len(arr)
@@ -47,54 +45,63 @@ def selection_sort(arr, track_steps=True):
 
     return arr, steps
 
-def merge_sort(arr, track_steps=True):
-    arr = arr.copy()
+def merge_sort(arr, track_steps=False):
     steps = []
 
-    def _merge_sort(sub_arr):
-        if len(sub_arr) <= 1:
-            return sub_arr
+    def _merge_sort(left, right):
+        if left >= right:
+            return
 
-        mid = len(sub_arr) // 2
-        left = _merge_sort(sub_arr[:mid])
-        right = _merge_sort(sub_arr[mid:])
+        mid = (left + right) // 2
 
-        merged = []
-        i = j = 0
+        _merge_sort(left, mid)
+        _merge_sort(mid + 1, right)
 
-        while i < len(left) and j < len(right):
+        merge(left, mid, right)
+
+    def merge(left, mid, right):
+        temp = []
+        i = left
+        j = mid + 1
+
+        while i <= mid and j <= right:
             if track_steps:
-                steps.append({'type': 'comparison', 'left': left[i], 'right': right[j], 'merged': merged.copy()})
-            if left[i] < right[j]:
-                merged.append(left[i])
-                if track_steps:
-                    steps.append({'type': 'append', 'value': left[i], 'merged': merged.copy()})
+                steps.append({
+                    "type": "compare",
+                    "indices": [i, j],
+                    "array": arr.copy()
+                })
+
+            if arr[i] <= arr[j]:
+                temp.append(arr[i])
                 i += 1
             else:
-                merged.append(right[j])
-                if track_steps:
-                    steps.append({'type': 'append', 'value': right[j], 'merged': merged.copy()})
+                temp.append(arr[j])
                 j += 1
 
-        while i < len(left):
-            merged.append(left[i])
-            if track_steps:
-                steps.append({'type': 'append', 'value': left[i], 'merged': merged.copy()})
+        while i <= mid:
+            temp.append(arr[i])
             i += 1
 
-        while j < len(right):
-            merged.append(right[j])
-            if track_steps:
-                steps.append({'type': 'append', 'value': right[j], 'merged': merged.copy()})
+        while j <= right:
+            temp.append(arr[j])
             j += 1
 
-        if track_steps:
-            steps.append({'type': 'merge_complete', 'merged': merged.copy()})
+        # Put merged values back into original array
+        for idx, val in enumerate(temp):
+            arr[left + idx] = val
 
-        return merged
+            if track_steps:
+                steps.append({
+                    "type": "overwrite",
+                    "index": left + idx,
+                    "array": arr.copy(),
+                    "range": [left, right]
+                })
 
-    sorted_arr = _merge_sort(arr)
-    return sorted_arr, steps
+    _merge_sort(0, len(arr) - 1)
+
+    return arr, steps
 
 def insertion_sort(arr, track_steps=True):
     arr = arr.copy()
