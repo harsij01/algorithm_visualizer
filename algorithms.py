@@ -19,7 +19,10 @@ def bubble_sort(arr, track_steps=True):
         if not swapped:
             break
 
-    return arr, steps
+    if track_steps:
+        return arr, steps
+    else:
+        return arr
 
 def selection_sort(arr, track_steps=True):
     arr = arr.copy()
@@ -43,7 +46,10 @@ def selection_sort(arr, track_steps=True):
             if track_steps:
                 steps.append({'type': 'swap', 'indices': (min_index, i), 'array': arr.copy()})
 
-    return arr, steps
+    if track_steps:
+        return arr, steps
+    else:
+        return arr
 
 def merge_sort(arr, track_steps=True):
     arr = arr.copy()
@@ -92,7 +98,11 @@ def merge_sort(arr, track_steps=True):
         return merged
 
     sorted_arr = _merge_sort(arr)
-    return sorted_arr, steps
+    
+    if track_steps:
+        return sorted_arr, steps
+    else:
+        return sorted_arr
 
 def insertion_sort(arr, track_steps=True):
     arr = arr.copy()
@@ -119,4 +129,7 @@ def insertion_sort(arr, track_steps=True):
         if track_steps:
             steps.append({'type': 'insert', 'index': j + 1, 'array': arr.copy()})
 
-    return arr, steps
+    if track_steps:
+        return arr, steps
+    else:
+        return arr
