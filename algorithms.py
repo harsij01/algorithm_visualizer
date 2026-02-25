@@ -19,10 +19,7 @@ def bubble_sort(arr, track_steps=True):
         if not swapped:
             break
 
-    if track_steps:
-        return arr, steps
-    else:
-        return arr
+    return (arr, steps) if track_steps else arr
 
 def selection_sort(arr, track_steps=True):
     arr = arr.copy()
@@ -46,10 +43,34 @@ def selection_sort(arr, track_steps=True):
             if track_steps:
                 steps.append({'type': 'swap', 'indices': (min_index, i), 'array': arr.copy()})
 
-    if track_steps:
-        return arr, steps
-    else:
-        return arr
+    return (arr, steps) if track_steps else arr
+
+def insertion_sort(arr, track_steps=True):
+    arr = arr.copy()
+    steps = []
+
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+
+        if track_steps:
+            steps.append({'type': 'extract', 'index': i, 'array': arr.copy()})
+
+        while j >= 0 and key < arr[j]:
+            if track_steps:
+                steps.append({'type': 'comparison', 'indices': (j, j + 1), 'array': arr.copy()})
+
+            arr[j + 1] = arr[j]
+            if track_steps:
+                steps.append({'type': 'shift', 'indices': (j, j + 1), 'array': arr.copy()})
+
+            j -= 1
+
+        arr[j + 1] = key
+        if track_steps:
+            steps.append({'type': 'insert', 'index': j + 1, 'array': arr.copy()})
+
+    return (arr, steps) if track_steps else arr
 
 def merge_sort(arr, track_steps=True):
     arr = arr.copy()
@@ -105,37 +126,4 @@ def merge_sort(arr, track_steps=True):
 
     _merge_sort(0, len(arr) - 1)
 
-    if track_steps:
-        return arr, steps
-    else:
-        return arr
-
-def insertion_sort(arr, track_steps=True):
-    arr = arr.copy()
-    steps = []
-
-    for i in range(1, len(arr)):
-        key = arr[i]
-        j = i - 1
-
-        if track_steps:
-            steps.append({'type': 'extract', 'index': i, 'array': arr.copy()})
-
-        while j >= 0 and key < arr[j]:
-            if track_steps:
-                steps.append({'type': 'comparison', 'indices': (j, j + 1), 'array': arr.copy()})
-
-            arr[j + 1] = arr[j]
-            if track_steps:
-                steps.append({'type': 'shift', 'indices': (j, j + 1), 'array': arr.copy()})
-
-            j -= 1
-
-        arr[j + 1] = key
-        if track_steps:
-            steps.append({'type': 'insert', 'index': j + 1, 'array': arr.copy()})
-
-    if track_steps:
-        return arr, steps
-    else:
-        return arr
+    return (arr, steps) if track_steps else arr

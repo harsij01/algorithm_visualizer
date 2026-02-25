@@ -1,4 +1,4 @@
-const DEFAULT_SPEED = 400; // milliseconds between steps
+const DEFAULT_SPEED = 200; // milliseconds between steps
 
 function renderStep(array, highlight = {}) {
     const container = document.getElementById("barContainer");
@@ -33,9 +33,14 @@ function renderStep(array, highlight = {}) {
 }
 
 async function animateSteps(steps, speed = DEFAULT_SPEED) {
+    let finalArray = null;
+
     for (const step of steps) {
-        
         let arrayToRender = step.array;
+        
+        if (arrayToRender) {
+            finalArray = arrayToRender; // keep updating final state
+        }
 
         // Set highlight based on step type
         let highlight = {};
@@ -68,11 +73,20 @@ async function animateSteps(steps, speed = DEFAULT_SPEED) {
             case "overwrite":
                 highlight = { index: step.index, color: "green" };
                 break;
+
+            case "change_min_index":
+                highlight = { index: step.index, color: "yellow" };
+                break;
         }
 
         renderStep(arrayToRender, highlight);
         await new Promise(resolve => setTimeout(resolve, speed));
     }
+
+    if (finalArray) {
+        renderStep(finalArray, { range: [0, finalArray.length - 1], color: "green" });
+    }
+
 }
 
 function runSort(array) {
