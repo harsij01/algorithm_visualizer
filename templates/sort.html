@@ -7,7 +7,16 @@
     </head>
     <body>
         <div class="controls">
-            <select id="algorithmSelect">
+            <label>Algorithm 1:</label>
+            <select id="algorithmSelect1">
+                <option value="bubble">Bubble</option>
+                <option value="selection">Selection</option>
+                <option value="insertion">Insertion</option>
+                <option value="merge">Merge</option>
+            </select>
+
+            <label>Algorithm 2:</label>
+            <select id="algorithmSelect2">
                 <option value="bubble">Bubble</option>
                 <option value="selection">Selection</option>
                 <option value="insertion">Insertion</option>
@@ -30,6 +39,10 @@
 
         <div id="barContainer" class="bar-container"></div>
 
+        <!-- Chart container -->
+        <canvas id="runtimeChart" width="400" height="200"></canvas>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="{{ url_for('static', filename='script.js') }}"></script>
     </body>
 </html>
