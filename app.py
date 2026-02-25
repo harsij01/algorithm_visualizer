@@ -46,7 +46,10 @@ def sort_handler():
     sort_function = algorithms[algorithm]
 
     start = time.perf_counter()
-    result = sort_function(arr, track_steps)
+    
+    arr_copy = arr.copy()
+    result = sort_function(arr_copy, track_steps)
+
     end = time.perf_counter()
 
     runtime = end - start
