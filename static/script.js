@@ -153,4 +153,15 @@ function generateRandom() {
     const array = Array.from({ length: size }, () =>
         Math.floor(Math.random() * maxValue)
     );
+
+    document.getElementById("arrayInput").value = array.join(",");
+    runSort(array)
+}
+
+async function animateSteps(steps) {
+    for (const step of steps) {
+        renderStep(step);
+        // pause between steps
+        await new Promise(resolve => setTimeout(resolve, 200)); // 200ms delay
+    }
 }
