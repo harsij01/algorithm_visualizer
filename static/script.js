@@ -32,30 +32,6 @@ function renderStep(array, highlight = {}) {
     });
 }
 
-function renderSubArray(fullArrayLength, range, subarray) {
-    const container = document.getElementById("subContainer");
-    container.innerHTML = "";
-
-    for (let i = 0; i < fullArrayLength; i++) {
-
-        const bar = document.createElement("div");
-        bar.style.flex = "1";
-
-        // If index is inside active range
-        if (range && i >= range[0] && i <= range[1]) {
-            const value = subarray[i - range[0]];
-            bar.style.height = value * 3 + "px";
-            bar.style.backgroundColor = "orange";
-        } else {
-            // Empty placeholder
-            bar.style.height = "0px";
-            bar.style.backgroundColor = "transparent";
-        }
-
-        container.appendChild(bar);
-    }
-}
-
 async function animateSteps(steps, speed = DEFAULT_SPEED) {
     for (const step of steps) {
         let arrayToRender = [];
@@ -92,14 +68,6 @@ async function animateSteps(steps, speed = DEFAULT_SPEED) {
             case "append":
                 highlight = { index: arrayToRender.length - 1, color: "blue" };
                 break;
-
-            case "active_range":
-                renderSubArray(
-                    step.array.length,
-                    step.range,
-                    step.subarray
-                );
-                break;
         }
 
         renderStep(arrayToRender, highlight);
@@ -126,7 +94,7 @@ function runSort(array) {
         if (mode === "visual" && data.steps) {
             await animateSteps(data.steps);
         } else {
-            renderBars(data.sorted_array);
+            renderStep(data.sorted_array);
         }
     })
     .catch(error => {
@@ -156,12 +124,4 @@ function generateRandom() {
 
     document.getElementById("arrayInput").value = array.join(",");
     runSort(array)
-}
-
-async function animateSteps(steps) {
-    for (const step of steps) {
-        renderStep(step);
-        // pause between steps
-        await new Promise(resolve => setTimeout(resolve, 200)); // 200ms delay
-    }
 }
