@@ -34,12 +34,8 @@ function renderStep(array, highlight = {}) {
 
 async function animateSteps(steps, speed = DEFAULT_SPEED) {
     for (const step of steps) {
-        let arrayToRender = [];
-
-        // Determine which array to render for this step
-        if (step.array) arrayToRender = step.array;
-        else if (step.merged) arrayToRender = step.merged;
-        else if (step.result) arrayToRender = step.result;
+        
+        let arrayToRender = step.array;
 
         // Set highlight based on step type
         let highlight = {};
