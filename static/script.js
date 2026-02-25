@@ -1,5 +1,6 @@
 const DEFAULT_SPEED = 200; // milliseconds between steps
 
+// Render array bars
 function renderStep(array, highlight = {}) {
     const container = document.getElementById("barContainer");
     container.innerHTML = "";
@@ -32,6 +33,7 @@ function renderStep(array, highlight = {}) {
     });
 }
 
+// Animate sorting steps
 async function animateSteps(steps, speed = DEFAULT_SPEED) {
     let finalArray = null;
 
@@ -86,12 +88,15 @@ async function animateSteps(steps, speed = DEFAULT_SPEED) {
     if (finalArray) {
         renderStep(finalArray, { range: [0, finalArray.length - 1], color: "green" });
     }
-
 }
 
+// Run two algorithms
 function runSort(array) {
-    const algorithm = document.getElementById("algorithmSelect").value;
+    const alg1 = document.getElementById("algorithmSelect1").value;
+    const alg2 = document.getElementById("algorithmSelect2").value;
     const mode = document.getElementById("modeSelect").value;
+    
+    const results = [];
 
     fetch("/sort", {
         method: "POST",
@@ -116,6 +121,29 @@ function runSort(array) {
     });
 }
 
+// Render runtime chart
+function renderChart(results) {
+    const ctx = document.getElementById('runtimeChart').getContext('2d');
+    const labels = results.map(r => r.algorithm);
+    const runtimes = results.map(r => r.data.runtime.toFixed(4));
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Runtime (seconds)',
+                data: runtimes,
+                backgroundColor: ['steelblue', 'orange']
+            }]
+        },
+        options: {
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+}
+
+// Handle input array
 function sendArray() {
     const input = document.getElementById("arrayInput").value;
     const array = input.split(/[\s,]+/).map(num => Number(num.trim())).filter(num => !isNaN(num));
@@ -128,6 +156,7 @@ function sendArray() {
     runSort(array);
 }
 
+// Generate random array
 function generateRandom() {
     const size = Number(document.getElementById("arraySize").value);
     const maxValue = Number(document.getElementById("maxValue").value);
