@@ -68,6 +68,10 @@ async function animateSteps(steps, speed = DEFAULT_SPEED) {
             case "append":
                 highlight = { index: arrayToRender.length - 1, color: "blue" };
                 break;
+
+            case "overwrite":
+                highlight = { index: step.index, color: "green" };
+                break;
         }
 
         renderStep(arrayToRender, highlight);
