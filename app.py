@@ -42,7 +42,6 @@ def sort_handler():
         return jsonify({"error": "Invalid mode"}), 400
 
     track_steps = (mode == "visual")
-
     sort_function = algorithms[algorithm]
 
     start = time.perf_counter()
@@ -52,23 +51,29 @@ def sort_handler():
 
     end = time.perf_counter()
 
-    runtime = end - start
+    runtime = (end - start) * 1000  # convert to ms
 
+    # visual mode
     if track_steps:
-        sorted_arr, steps = result
+        sorted_arr, steps, op_count = result
+
         return jsonify({
             "original_array": arr,
             "sorted_array": sorted_arr,
             "steps": steps,
-            "runtime": runtime
+            "runtime": round(runtime, 4),
+            "operations": op_count
         })
 
+    # benchmark mode
     else:
-        sorted_arr = result
+        sorted_arr, op_count = result
+
         return jsonify({
             "original_array": arr,
             "sorted_array": sorted_arr,
-            "runtime": runtime
+            "runtime": round(runtime, 4),
+            "operations": op_count
         })
 
 if __name__ == "__main__":

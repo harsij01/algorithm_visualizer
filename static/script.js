@@ -127,9 +127,15 @@ async function runSort(array) {
             return;
         }
 
-        results.push({ algorithm, runtime: data.runtime });
+        results.push({
+            algorithm,
+            runtime: data.runtime,
+            operations: data.operations,
+            complexity: data.complexity   // if you added backend complexity_map
+        });
     }
     renderChart(results);
+    renderAnalysis(results, array.length);
 }
 
 // Render runtime chart
@@ -160,6 +166,41 @@ function renderChart(results) {
             }
         }
     });
+}
+
+function renderAnalysis(results, arraySize) {
+    const analysisDiv = document.getElementById("analysis");
+    analysisDiv.innerHTML = "";
+
+    results.forEach(r => {
+        analysisDiv.innerHTML += `
+            <div class="analysis-card">
+                <h3>${r.algorithm.toUpperCase()}</h3>
+                <p><strong>Runtime:</strong> ${r.runtime.toFixed(4)} ms</p>
+                <p><strong>Operations:</strong> ${r.operations}</p>
+                ${r.complexity ? `
+                    <p><strong>Best:</strong> ${r.complexity.best}</p>
+                    <p><strong>Average:</strong> ${r.complexity.average}</p>
+                    <p><strong>Worst:</strong> ${r.complexity.worst}</p>
+                ` : ""}
+            </div>
+        `;
+    });
+
+    // Highlight faster algorithm
+    const faster = results[0].runtime < results[1].runtime ? results[0] : results[1];
+    const slower = results[0].runtime < results[1].runtime ? results[1] : results[0];
+
+    const ratio = (slower.runtime / faster.runtime).toFixed(2);
+
+    analysisDiv.innerHTML += `
+        <div class="comparison-highlight">
+            🚀 <strong>${faster.algorithm.toUpperCase()}</strong> is 
+            <strong>${ratio}x faster</strong> than 
+            ${slower.algorithm.toUpperCase()} 
+            (n = ${arraySize})
+        </div>
+    `;
 }
 
 // Handle input array

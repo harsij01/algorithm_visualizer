@@ -2,34 +2,42 @@ def bubble_sort(arr, track_steps=True):
     arr = arr.copy()
     n = len(arr)
     steps = []
+    op_count = 0
 
     for i in range(n - 1):
         swapped = False
 
         for j in range(n - i - 1):
+            op_count += 1  # comparison
+
             if track_steps:
                 steps.append({'type': 'comparison', 'indices': (j, j + 1), 'array': arr.copy()})
 
             if arr[j] > arr[j + 1]:
                 arr[j], arr[j + 1] = arr[j + 1], arr[j]
                 swapped = True
+                op_count += 1  # swap
+
                 if track_steps:
                     steps.append({'type': 'swap', 'indices': (j, j + 1), 'array': arr.copy()})
         
         if not swapped:
             break
 
-    return (arr, steps) if track_steps else arr
+    return (arr, steps, op_count) if track_steps else (arr, op_count)
 
 def selection_sort(arr, track_steps=True):
     arr = arr.copy()
     n = len(arr)
     steps = []
+    op_count = 0
 
     for i in range(n - 1):
         min_index = i
 
         for j in range(i + 1, n):
+            op_count += 1  # comparison
+
             if track_steps:
                 steps.append({'type': 'comparison', 'indices': (j,min_index), 'array': arr.copy()})
 
@@ -40,14 +48,17 @@ def selection_sort(arr, track_steps=True):
 
         if min_index != i:
             arr[min_index], arr[i] = arr[i], arr[min_index]
+            op_count += 1  # swap
+
             if track_steps:
                 steps.append({'type': 'swap', 'indices': (min_index, i), 'array': arr.copy()})
 
-    return (arr, steps) if track_steps else arr
+    return (arr, steps, op_count) if track_steps else (arr, op_count)
 
 def insertion_sort(arr, track_steps=True):
     arr = arr.copy()
     steps = []
+    op_count = 0
 
     for i in range(1, len(arr)):
         key = arr[i]
@@ -57,26 +68,35 @@ def insertion_sort(arr, track_steps=True):
             steps.append({'type': 'extract', 'index': i, 'array': arr.copy()})
 
         while j >= 0 and key < arr[j]:
+            op_count += 1  # comparison
+
             if track_steps:
                 steps.append({'type': 'comparison', 'indices': (j, j + 1), 'array': arr.copy()})
 
             arr[j + 1] = arr[j]
+            op_count += 1  # shift
+
             if track_steps:
                 steps.append({'type': 'shift', 'indices': (j, j + 1), 'array': arr.copy()})
 
             j -= 1
 
         arr[j + 1] = key
+        op_count += 1  # insert
+
         if track_steps:
             steps.append({'type': 'insert', 'index': j + 1, 'array': arr.copy()})
 
-    return (arr, steps) if track_steps else arr
+    return (arr, steps, op_count) if track_steps else (arr, op_count)
 
 def merge_sort(arr, track_steps=True):
     arr = arr.copy()
     steps = []
+    op_count = 0
 
     def _merge_sort(left, right):
+        nonlocal op_count
+        
         if left >= right:
             return
 
@@ -89,8 +109,11 @@ def merge_sort(arr, track_steps=True):
     def merge(left, mid, right):
         temp = []
         i, j = left, mid + 1
+        nonlocal op_count
 
         while i <= mid and j <= right:
+            op_count += 1  # comparison
+
             if track_steps:
                 steps.append({
                     "type": "comparison",
@@ -116,6 +139,7 @@ def merge_sort(arr, track_steps=True):
         # Copy back into original array
         for k in range(len(temp)):
             arr[left + k] = temp[k]
+            op_count += 1  # write operation
 
             if track_steps:
                 steps.append({
@@ -126,4 +150,4 @@ def merge_sort(arr, track_steps=True):
 
     _merge_sort(0, len(arr) - 1)
 
-    return (arr, steps) if track_steps else arr
+    return (arr, steps, op_count) if track_steps else (arr, op_count)
