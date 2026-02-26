@@ -1,4 +1,5 @@
 const DEFAULT_SPEED = 200; // milliseconds between steps
+let runtimeChart = null;
 
 // Render array bars
 function renderStep(array, highlight = {}) {
@@ -91,54 +92,72 @@ async function animateSteps(steps, speed = DEFAULT_SPEED) {
 }
 
 // Run two algorithms
-function runSort(array) {
+async function runSort(array) {
     const alg1 = document.getElementById("algorithmSelect1").value;
     const alg2 = document.getElementById("algorithmSelect2").value;
     const mode = document.getElementById("modeSelect").value;
+
+    if (alg1 === alg2) {
+        alert("Please select two different algorithms.");
+        return;
+    }
+
+    if (mode !== "benchmark") {
+        alert("Comparison graph works in Benchmark mode only.");
+        return;
+    }
     
     const results = [];
 
-    fetch("/sort", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ array, algorithm, mode })
-    })
-    .then(res => res.json())
-    .then(async data => {
+    for (const algorithm of [alg1, alg2]) {
+        const res = await fetch("/sort", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                array: [...array],  // clone array to ensure fairness
+                algorithm,
+                mode: "benchmark"
+            })
+        });
+
+        const data = await res.json();
+
         if (data.error) {
             alert(data.error);
             return;
         }
 
-        if (mode === "visual" && data.steps) {
-            await animateSteps(data.steps);
-        } else {
-            renderStep(data.sorted_array);
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-    });
+        results.push({ algorithm, runtime: data.runtime });
+    }
+    renderChart(results);
 }
 
 // Render runtime chart
 function renderChart(results) {
-    const ctx = document.getElementById('runtimeChart').getContext('2d');
-    const labels = results.map(r => r.algorithm);
-    const runtimes = results.map(r => r.data.runtime.toFixed(4));
+    const ctx = document.getElementById("runtimeChart").getContext("2d");
 
-    new Chart(ctx, {
-        type: 'bar',
+    // Destroy previous chart if exists
+    if (runtimeChart) {
+        runtimeChart.destroy();
+    }
+
+    runtimeChart = new Chart(ctx, {
+        type: "bar",
         data: {
-            labels: labels,
+            labels: results.map(r => r.algorithm.toUpperCase()),
             datasets: [{
-                label: 'Runtime (seconds)',
-                data: runtimes,
-                backgroundColor: ['steelblue', 'orange']
+                label: "Runtime (seconds)",
+                data: results.map(r => r.runtime),
+                backgroundColor: ["steelblue", "orange"]
             }]
         },
         options: {
-            scales: { y: { beginAtZero: true } }
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
         }
     });
 }

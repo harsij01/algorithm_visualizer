@@ -30,21 +30,46 @@ h3 {
     background-color: #fff8e1; /* light warm background */
 }
 
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+#runtimeChart {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+input, select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    min-width: 110px;
+    text-align: center;
+}
+
 button {
-    padding: 8px 15px;
-    margin: 10px;
+    padding: 8px 16px;
     border: none;
     background-color: steelblue;
     color: white;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 button:hover {
     background-color: #2f6fa3;
 }
 
-input, select {
-    padding: 6px;
-    margin: 5px;
+button:active {
+    transform: scale(0.97);
 }
