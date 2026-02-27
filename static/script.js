@@ -5,8 +5,14 @@ function createBars(array) {
     const container = document.getElementById("barContainer");
     container.innerHTML = "";
 
+    const containerWidth = container.clientWidth;
+    const gap = 4; // same as your CSS gap
+    const totalGap = gap * (array.length - 1);
+    const barWidth = (containerWidth - totalGap) / array.length;
+
     array.forEach(() => {
         const bar = document.createElement("div");
+        bar.style.width = `${barWidth}px`; // set dynamic width
         container.appendChild(bar);
     });
 }
@@ -56,7 +62,10 @@ async function animateSteps(steps, speed = DEFAULT_SPEED) {
         };
 
     for (const step of steps) {
+        console.log(step);
         let arrayToRender = step.array;
+
+        if (!arrayToRender) continue; // skip if undefined
         
         if (arrayToRender) {
             finalArray = arrayToRender; // keep updating final state
@@ -116,6 +125,7 @@ async function runVisual(array) {
 
     runButton.disabled = true;
 
+    // fetch sorted data
     const res = await fetch("/sort", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -126,7 +136,7 @@ async function runVisual(array) {
         })
     });
 
-    const data = await res.json();
+    const data = await res.json(); // must be declared BEFORE usage
     console.log("Server response for visual:", data);
 
     if (data.error) {
@@ -136,6 +146,8 @@ async function runVisual(array) {
     }
 
     const speed = Number(document.getElementById("speedControl").value);
+
+    console.log("steps length:", data.steps.length);
 
     await animateSteps(data.steps, speed);
 
