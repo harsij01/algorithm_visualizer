@@ -1,48 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta name="viewport" content="initial-scale=1, width=device-width">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Algorithm Visualizer</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
-        <div class="controls">
-            <label>Algorithm 1:</label>
-            <select id="algorithmSelect1">
-                <option value="bubble">Bubble</option>
-                <option value="selection">Selection</option>
-                <option value="insertion">Insertion</option>
-                <option value="merge">Merge</option>
-            </select>
+        <h1 class="title">Algorithm Visualizer</h1>
+        <div class="container">
+            <div class="controls">
+                <label for="algorithmSelect1">Algorithm 1:</label>
+                <select id="algorithmSelect1">
+                    <option value="bubble">Bubble</option>
+                    <option value="selection">Selection</option>
+                    <option value="insertion">Insertion</option>
+                    <option value="merge">Merge</option>
+                </select>
 
-            <label>Algorithm 2:</label>
-            <select id="algorithmSelect2">
-                <option value="bubble">Bubble</option>
-                <option value="selection">Selection</option>
-                <option value="insertion">Insertion</option>
-                <option value="merge">Merge</option>
-            </select>
+                <label for="algorithmSelect2">Algorithm 2:</label>
+                <select id="algorithmSelect2">
+                    <option value="bubble">Bubble</option>
+                    <option value="selection">Selection</option>
+                    <option value="insertion">Insertion</option>
+                    <option value="merge">Merge</option>
+                </select>
 
-            <select id="modeSelect">
-                <option value="visual">Visual</option>
-                <option value="benchmark">Benchmark</option>
-            </select>
+                <select id="modeSelect">
+                    <option value="visual">Visual</option>
+                    <option value="benchmark">Benchmark</option>
+                </select>
 
-            <input type="text" id="arrayInput" placeholder="Enter numbers separated by commas">
-            <button onclick="sendArray()">Sort</button>
+                <label>Speed:</label>
+                <input type="range" id="speedControl" min="10" max="500" value="200">
 
-            <input type="number" id="arraySize" placeholder="Size" value="20">
-            <input type="number" id="maxValue" placeholder="Max Value" value="100">
+                <input type="text" id="arrayInput" placeholder="Enter numbers separated by commas">
+                <button id="runButton">Run</button>
 
-            <button onclick="generateRandom()">Generate Random</button>
+                <input type="number" id="arraySize" min="1" max="1000" value="20">
+                <input type="number" id="maxValue" min="1" max="1000" value="100">
+
+                <button id="generateRandomButton" onclick="generateRandom()">Generate Random</button>
+            </div>
         </div>
 
-        <div id="barContainer" class="bar-container"></div>
+        <div id="visualSection">
+            <div id="barContainer" class="bar-container"></div>
+        </div>
 
-        <!-- Chart container -->
-        <canvas id="runtimeChart" width="400" height="200"></canvas>
-
-        <div id="analysis"></div>
+        <div id="benchmarkSection">
+            <canvas id="runtimeChart"></canvas>
+            <div id="analysis"></div>
+        </div>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="{{ url_for('static', filename='script.js') }}"></script>

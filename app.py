@@ -11,6 +11,29 @@ SORTING_ALGORITHMS = {
     "merge": merge_sort
 }
 
+COMPLEXITIES = {
+    "bubble": {
+        "best": "O(n)",
+        "average": "O(n²)",
+        "worst": "O(n²)"
+    },
+    "selection": {
+        "best": "O(n²)",
+        "average": "O(n²)",
+        "worst": "O(n²)"
+    },
+    "insertion": {
+        "best": "O(n)",
+        "average": "O(n²)",
+        "worst": "O(n²)"
+    },
+    "merge": {
+        "best": "O(n log n)",
+        "average": "O(n log n)",
+        "worst": "O(n log n)"
+    }
+}
+
 @app.route("/")
 def index():
     return render_template("sort.html")
@@ -56,24 +79,33 @@ def sort_handler():
 
     runtime = (end - start) * 1000  # convert to ms
 
-    # visual mode
-    if track_steps:
-        sorted_arr, steps, op_count = result
-    # benchmark mode
-    else:
-        sorted_arr, op_count = result
-
     response = {
-    "original_array": arr,
-    "sorted_array": sorted_arr,
-    "runtime": round(runtime, 4),
-    "operations": op_count
+        "original_array": arr,
+        "runtime": round(runtime, 4)
     }
 
     if track_steps:
-        response["steps"] = steps
+        try:
+            sorted_arr, steps, op_count = result
+        except Exception:
+            return jsonify({"error": "Sorting function must return (sorted_arr, steps, op_count) for visual mode"}), 500
+        response.update({
+            "sorted_array": sorted_arr,
+            "steps": steps,
+            "operations": op_count
+        })
+    else:
+        try:
+            sorted_arr, op_count = result
+        except Exception:
+            return jsonify({"error": "Sorting function must return (sorted_arr, op_count) for benchmark mode"}), 500
+        response.update({
+            "sorted_array": sorted_arr,
+            "operations": op_count,
+            "complexity": COMPLEXITIES[algorithm]
+        })
 
-    return response
+    return jsonify(response)
 
 if __name__ == "__main__":
     app.run(debug=True)

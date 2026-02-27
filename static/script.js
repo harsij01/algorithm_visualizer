@@ -15,19 +15,18 @@ function updateBars(array, highlight = {}) {
     const bars = document.getElementById("barContainer").children;
 
     array.forEach((value, index) => {
+        if (!bars[index]) return;  // safety check
+    
         bars[index].style.height = value * 3 + "px";
         bars[index].style.backgroundColor = "steelblue";
 
         // Highlight range
-        if (highlight.range &&
-            index >= highlight.range[0] &&
-            index <= highlight.range[1]) {
+        if (highlight.range && index >= highlight.range[0] && index <= highlight.range[1]) {
             bars[index].style.backgroundColor = highlight.color;
         }
 
         // Highlight multiple indices
-        if (highlight.indices &&
-            highlight.indices.includes(index)) {
+        if (highlight.indices && highlight.indices.includes(index)) {
             bars[index].style.backgroundColor = highlight.color;
         }
 
@@ -111,58 +110,105 @@ async function animateSteps(steps, speed = DEFAULT_SPEED) {
     }
 }
 
+async function runVisual(array) {
+    const algorithm = document.getElementById("algorithmSelect1").value;
+    const runButton = document.getElementById("runButton");
+
+    runButton.disabled = true;
+
+    const res = await fetch("/sort", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            array: [...array],
+            algorithm,
+            mode: "visual"
+        })
+    });
+
+    const data = await res.json();
+    console.log("Server response for visual:", data);
+
+    if (data.error) {
+        alert(data.error);
+        runButton.disabled = false;
+        return;
+    }
+
+    const speed = Number(document.getElementById("speedControl").value);
+
+    await animateSteps(data.steps, speed);
+
+    runButton.disabled = false;
+}
+
 // Run two algorithms
-async function runSort(array) {
+async function runBenchmark(array) {
     const alg1 = document.getElementById("algorithmSelect1").value;
     const alg2 = document.getElementById("algorithmSelect2").value;
-    const mode = document.getElementById("modeSelect").value;
 
     if (alg1 === alg2) {
         alert("Please select two different algorithms.");
         return;
     }
 
-    if (mode !== "benchmark") {
-        alert("Comparison graph works in Benchmark mode only.");
-        return;
-    }
-    
+    const runButton = document.getElementById("runButton");
+    runButton.disabled = true;
+
     const results = [];
 
     for (const algorithm of [alg1, alg2]) {
-        const res = await fetch("/sort", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                array: [...array],  // clone array to ensure fairness
+        try {
+            const res = await fetch("/sort", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    array: [...array],
+                    algorithm,
+                    mode: "benchmark"
+                })
+            });
+
+            const data = await res.json();
+
+            if (data.error) {
+                alert(data.error);
+                runButton.disabled = false;
+                return;
+            }
+
+            results.push({
                 algorithm,
-                mode: "benchmark"
-            })
-        });
+                runtime: data.runtime,
+                operations: data.operations,
+                complexity: data.complexity
+            });
 
-        const data = await res.json();
-
-        if (data.error) {
-            alert(data.error);
+        } catch (err) {
+            alert("Server error.");
+            runButton.disabled = false;
             return;
         }
-
-        results.push({
-            algorithm,
-            runtime: data.runtime,
-            operations: data.operations,
-            complexity: data.complexity   // if you added backend complexity_map
-        });
     }
+
     renderChart(results);
     renderAnalysis(results, array.length);
+    runButton.disabled = false;
 }
 
-// Render runtime chart
+async function runSort(array) {
+    const mode = document.getElementById("modeSelect").value;
+
+    if (mode === "visual") {
+        await runVisual(array);
+    } else {
+        await runBenchmark(array);
+    }
+}
+
 function renderChart(results) {
     const ctx = document.getElementById("runtimeChart").getContext("2d");
 
-    // Destroy previous chart if exists
     if (runtimeChart) {
         runtimeChart.destroy();
     }
@@ -180,9 +226,7 @@ function renderChart(results) {
         options: {
             responsive: true,
             scales: {
-                y: {
-                    beginAtZero: true
-                }
+                y: { beginAtZero: true }
             }
         }
     });
@@ -211,7 +255,9 @@ function renderAnalysis(results, arraySize) {
     const faster = results[0].runtime < results[1].runtime ? results[0] : results[1];
     const slower = results[0].runtime < results[1].runtime ? results[1] : results[0];
 
-    const ratio = (slower.runtime / faster.runtime).toFixed(2);
+    const ratio = faster.runtime > 0
+        ? (slower.runtime / faster.runtime).toFixed(2)
+        : "∞";
 
     analysisDiv.innerHTML += `
         <div class="comparison-highlight">
@@ -224,16 +270,27 @@ function renderAnalysis(results, arraySize) {
 }
 
 // Handle input array
-function sendArray() {
+async function sendArray() {
     const input = document.getElementById("arrayInput").value;
     const array = input.split(/[\s,]+/).map(num => Number(num.trim())).filter(num => !isNaN(num));
+    const mode = document.getElementById("modeSelect").value;
+
+    console.log("Run button clicked", { array, mode });
 
     if (array.length === 0) {
         alert("Please enter valid numbers.");
         return;
     }
 
-    runSort(array);
+    if (mode === "visual") {
+        document.getElementById("visualSection").style.display = "block";
+        document.getElementById("benchmarkSection").style.display = "none";
+    } else {
+        document.getElementById("visualSection").style.display = "none";
+        document.getElementById("benchmarkSection").style.display = "block";
+    }
+
+    await runSort(array);
 }
 
 // Generate random array
@@ -246,5 +303,38 @@ function generateRandom() {
     );
 
     document.getElementById("arrayInput").value = array.join(",");
-    runSort(array)
+
+    // Render bars immediately without running the sort
+    createBars(array);
+    updateBars(array);
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const modeSelect = document.getElementById("modeSelect");
+    const visualSection = document.getElementById("visualSection");
+    const benchmarkSection = document.getElementById("benchmarkSection");
+    const algorithmSelect2 = document.getElementById("algorithmSelect2");
+    const runButton = document.getElementById("runButton");
+
+    function updateModeUI() {
+        const mode = modeSelect.value;
+
+        if (mode === "visual") {
+            visualSection.style.display = "block";
+            benchmarkSection.style.display = "none";
+            algorithmSelect2.disabled = true;
+        } else {
+            visualSection.style.display = "none";
+            benchmarkSection.style.display = "block";
+            algorithmSelect2.disabled = false;
+        }
+    }
+
+    modeSelect.addEventListener("change", updateModeUI);
+
+    // Attach click handler for Run button
+    runButton.addEventListener("click", sendArray);
+
+    // Initialize on page load
+    updateModeUI();
+});
