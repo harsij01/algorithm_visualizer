@@ -5,8 +5,14 @@ function createBars(array) {
     const container = document.getElementById("barContainer");
     container.innerHTML = "";
 
+    const containerWidth = container.clientWidth;
+    const gap = 4; // same as your CSS gap
+    const totalGap = gap * (array.length - 1);
+    const barWidth = (containerWidth - totalGap) / array.length;
+
     array.forEach(() => {
         const bar = document.createElement("div");
+        bar.style.width = `${barWidth}px`; // set dynamic width
         container.appendChild(bar);
     });
 }
@@ -56,7 +62,6 @@ async function animateSteps(steps, speed = DEFAULT_SPEED) {
         };
 
     for (const step of steps) {
-        console.log(step);
         let arrayToRender = step.array;
 
         if (!arrayToRender) continue; // skip if undefined
@@ -130,8 +135,7 @@ async function runVisual(array) {
         })
     });
 
-    const data = await res.json();
-    console.log("Server response for visual:", data);
+    const data = await res.json(); // must be declared BEFORE usage
 
     if (data.error) {
         alert(data.error);
@@ -139,9 +143,7 @@ async function runVisual(array) {
         return;
     }
 
-    const speed = Number(document.getElementById("speedControl").value);
-
-    await animateSteps(data.steps, speed);
+    await animateSteps(data.steps);
 
     runButton.disabled = false;
 }
@@ -278,8 +280,6 @@ async function sendArray() {
     const input = document.getElementById("arrayInput").value;
     const array = input.split(/[\s,]+/).map(num => Number(num.trim())).filter(num => !isNaN(num));
     const mode = document.getElementById("modeSelect").value;
-
-    console.log("Run button clicked", { array, mode });
 
     if (array.length === 0) {
         alert("Please enter valid numbers.");
