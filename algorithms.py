@@ -1,7 +1,7 @@
 def bubble_sort(arr, track_steps=True):
     arr = arr.copy()
     n = len(arr)
-    steps = []
+    steps = [] if track_steps else None
     op_count = 0
 
     for i in range(n - 1):
@@ -29,7 +29,7 @@ def bubble_sort(arr, track_steps=True):
 def selection_sort(arr, track_steps=True):
     arr = arr.copy()
     n = len(arr)
-    steps = []
+    steps = [] if track_steps else None
     op_count = 0
 
     for i in range(n - 1):
@@ -57,7 +57,7 @@ def selection_sort(arr, track_steps=True):
 
 def insertion_sort(arr, track_steps=True):
     arr = arr.copy()
-    steps = []
+    steps = [] if track_steps else None
     op_count = 0
 
     for i in range(1, len(arr)):
@@ -91,7 +91,7 @@ def insertion_sort(arr, track_steps=True):
 
 def merge_sort(arr, track_steps=True):
     arr = arr.copy()
-    steps = []
+    steps = [] if track_steps else None
     op_count = 0
 
     def _merge_sort(left, right):
