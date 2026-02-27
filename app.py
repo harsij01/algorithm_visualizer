@@ -46,11 +46,9 @@ def sort_handler():
     sort_function = SORTING_ALGORITHMS[algorithm]
 
     start = time.perf_counter()
-    
-    arr_copy = arr.copy()
 
     try:
-        result = sort_function(arr_copy, track_steps)
+        result = sort_function(arr, track_steps)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
