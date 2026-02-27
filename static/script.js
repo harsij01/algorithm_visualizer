@@ -145,9 +145,11 @@ async function runVisual(array) {
         return;
     }
 
+    const speed = Number(document.getElementById("speedControl").value);
+
     console.log("steps length:", data.steps.length);
 
-    await animateSteps(data.steps);
+    await animateSteps(data.steps, speed);
 
     runButton.disabled = false;
 }
