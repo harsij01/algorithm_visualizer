@@ -62,6 +62,7 @@ async function animateSteps(steps, speed = DEFAULT_SPEED) {
         };
 
     for (const step of steps) {
+        console.log(step);
         let arrayToRender = step.array;
 
         if (!arrayToRender) continue; // skip if undefined
@@ -136,12 +137,15 @@ async function runVisual(array) {
     });
 
     const data = await res.json(); // must be declared BEFORE usage
+    console.log("Server response for visual:", data);
 
     if (data.error) {
         alert(data.error);
         runButton.disabled = false;
         return;
     }
+
+    console.log("steps length:", data.steps.length);
 
     await animateSteps(data.steps);
 
@@ -280,6 +284,8 @@ async function sendArray() {
     const input = document.getElementById("arrayInput").value;
     const array = input.split(/[\s,]+/).map(num => Number(num.trim())).filter(num => !isNaN(num));
     const mode = document.getElementById("modeSelect").value;
+
+    console.log("Run button clicked", { array, mode });
 
     if (array.length === 0) {
         alert("Please enter valid numbers.");
