@@ -1,42 +1,60 @@
 const DEFAULT_SPEED = 200; // milliseconds between steps
 let runtimeChart = null;
 
-// Render array bars
-function renderStep(array, highlight = {}) {
+function createBars(array) {
     const container = document.getElementById("barContainer");
     container.innerHTML = "";
 
-    array.forEach((value, index) => {
+    array.forEach(() => {
         const bar = document.createElement("div");
-        bar.style.height = value * 3 + "px";
-        bar.style.flex = "1";
-        bar.style.margin = "0";
-        bar.style.backgroundColor = "steelblue";
+        container.appendChild(bar);
+    });
+}
+
+function updateBars(array, highlight = {}) {
+    const bars = document.getElementById("barContainer").children;
+
+    array.forEach((value, index) => {
+        bars[index].style.height = value * 3 + "px";
+        bars[index].style.backgroundColor = "steelblue";
 
         // Highlight range
-        if (highlight.range) {
-            if (index >= highlight.range[0] && index <= highlight.range[1]) {
-                bar.style.backgroundColor = highlight.color;
-            }
+        if (highlight.range &&
+            index >= highlight.range[0] &&
+            index <= highlight.range[1]) {
+            bars[index].style.backgroundColor = highlight.color;
         }
 
-        // highlight multiple indices
-        if (highlight.indices && highlight.indices.includes(index)) {
-            bar.style.backgroundColor = highlight.color;
+        // Highlight multiple indices
+        if (highlight.indices &&
+            highlight.indices.includes(index)) {
+            bars[index].style.backgroundColor = highlight.color;
         }
 
-        // highlight single index
+        // Highlight single index
         if (highlight.index === index) {
-            bar.style.backgroundColor = highlight.color;
+            bars[index].style.backgroundColor = highlight.color;
         }
-
-        container.appendChild(bar);
     });
 }
 
 // Animate sorting steps
 async function animateSteps(steps, speed = DEFAULT_SPEED) {
     let finalArray = null;
+
+    if (steps.length > 0) {
+        createBars(steps[0].array);
+    }
+
+    const COLORS = {
+            comparison: "red",
+            swap: "orange",
+            insert: "green",
+            shift: "purple",
+            overwrite: "green",
+            change_min_index: "yellow",
+            append: "blue"
+        };
 
     for (const step of steps) {
         let arrayToRender = step.array;
@@ -51,43 +69,45 @@ async function animateSteps(steps, speed = DEFAULT_SPEED) {
         switch (step.type) {
             case "comparison":
                 if (step.indices)
-                    highlight = { indices: step.indices, color: "red" };
+                    highlight = { indices: step.indices, color: COLORS.comparison };
                 break;
 
             case "swap":
                 if (step.indices)
-                    highlight = { indices: step.indices, color: "orange" };
+                    highlight = { indices: step.indices, color: COLORS.swap };
                 break;
 
             case "insert":
             case "extract":
-                highlight = { index: step.index, color: "green" };
+                highlight = { index: step.index, color: COLORS.insert };
                 break;
 
             case "shift":
                 if (step.indices)
-                    highlight = { indices: step.indices, color: "purple" };
+                    highlight = { indices: step.indices, color: COLORS.shift };
                 break;
 
             case "append":
-                highlight = { index: arrayToRender.length - 1, color: "blue" };
+                highlight = { index: arrayToRender.length - 1, color: COLORS.append };
                 break;
 
             case "overwrite":
-                highlight = { index: step.index, color: "green" };
+                highlight = { index: step.index, color: COLORS.overwrite };
                 break;
 
             case "change_min_index":
-                highlight = { index: step.index, color: "yellow" };
+                highlight = { index: step.index, color: COLORS.change_min_index };
                 break;
         }
 
-        renderStep(arrayToRender, highlight);
-        await new Promise(resolve => setTimeout(resolve, speed));
+        updateBars(arrayToRender, highlight);
+        await new Promise(resolve => {
+            setTimeout(() => requestAnimationFrame(resolve), speed);
+        });
     }
 
     if (finalArray) {
-        renderStep(finalArray, { range: [0, finalArray.length - 1], color: "green" });
+        updateBars(finalArray, { range: [0, finalArray.length - 1], color: "green" });
     }
 }
 
@@ -152,7 +172,7 @@ function renderChart(results) {
         data: {
             labels: results.map(r => r.algorithm.toUpperCase()),
             datasets: [{
-                label: "Runtime (seconds)",
+                label: "Runtime (ms)",
                 data: results.map(r => r.runtime),
                 backgroundColor: ["steelblue", "orange"]
             }]
