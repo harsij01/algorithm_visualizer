@@ -1,7 +1,6 @@
 # Algorithm Visualizer
 
 A web-based algorithm visualizer built with **Flask**, **Python**, and **JavaScript**.  
-Supports **Bubble Sort**, **Selection Sort**, **Insertion Sort**, and **Merge Sort**, with step-by-step visual animations or benchmarking mode.
 
 ---
 
@@ -26,6 +25,20 @@ This project was built to:
 The application supports both:
 - **Visual Mode** – animated step-by-step sorting
 - **Benchmark Mode** – runtime and operation comparison
+
+---
+
+## Supported Algorithms
+
+- Bubble Sort
+- Selection Sort
+- Insertion Sort
+- Merge Sort
+
+Each algorithm includes:
+- Operation counting
+- Time complexity analysis
+- Step tracking for animation
 
 ## Installation
 
