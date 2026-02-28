@@ -40,6 +40,19 @@ Each algorithm includes:
 - Time complexity analysis
 - Step tracking for animation
 
+## Features
+### Visualization
+
+Dynamic bar width (responsive to array size)
+Color-coded highlights:
+- 🔴 Comparison
+- 🟠 Swap
+- 🟢 Insert / Overwrite
+- 🟡 Minimum index change
+- 🟣 Shift
+Adjustable animation speed
+Supports custom and randomly generated arrays
+
 ## Installation
 
 1. Clone this repository:
