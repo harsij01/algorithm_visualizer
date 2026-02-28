@@ -1,20 +1,16 @@
 # Algorithm Visualizer
 
-A web-based algorithm visualizer built with **Flask**, **Python**, and **JavaScript**.  
-
----
-
-## Features
-
-- Visualize sorting algorithms in real-time with colored bars.
-- Highlight comparisons, swaps, insertions, and overwrites.
-- Benchmark mode to measure algorithm runtime without visualization.
-- Generate random arrays or input custom arrays.
-- Responsive and easy-to-use interface.
+A web-based algorithm visualizer built with **Flask**, **Python**, and **JavaScript**.
 
 ---
 
 ## Project Description
+
+This application allows users to:
+- Visualize sorting algorithms step-by-step
+- Compare algorithm performance
+- Analyze time complexity
+- Benchmark runtime and operation counts
 
 This project was built to:
 - Understand how sorting algorithms work internally
