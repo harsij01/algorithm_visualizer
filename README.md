@@ -74,6 +74,18 @@ Each algorithm includes:
 
 ---
 
+## Tech Stack
+
+* Backend
+    * Python
+    * Flask
+* Frontend
+    * HTML5
+    * CSS3
+    * Bootstrap 5
+    * JavaScript (Vanilla)
+    * Chart.js
+
 ## Installation
 
 1. Clone this repository:
