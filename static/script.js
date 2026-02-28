@@ -6,9 +6,10 @@ function createBars(array) {
     container.innerHTML = "";
 
     const containerWidth = container.clientWidth;
-    const gap = 4; // same as your CSS gap
+    const gap = 2; // match CSS
     const totalGap = gap * (array.length - 1);
-    const barWidth = (containerWidth - totalGap) / array.length;
+    const barWidth = Math.max((containerWidth - totalGap) / array.length, 2); // min 2px width
+    bar.style.width = `${barWidth}px`;
 
     array.forEach(() => {
         const bar = document.createElement("div");
