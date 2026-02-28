@@ -123,3 +123,11 @@ python app.py
 ```bash
 http://127.0.0.1:5000
 ```
+
+## 📸 Screenshots
+
+### Visual Mode
+![Visual Mode](screenshots/visual_mode.png)
+
+### Benchmark Mode
+![Benchmark Mode](screenshots/benchmark_mode.png)
