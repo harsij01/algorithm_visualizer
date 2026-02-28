@@ -11,13 +11,14 @@ h3 {
 .bar-container {
     display: flex;
     align-items: flex-end;
-    justify-content: center;
+    justify-content: space-between;
     height: 300px;
-    width: 90%;
+    width: 100%; /* full width */
+    max-width: 1000px;
     margin: 20px auto;
     padding: 10px;
     box-sizing: border-box;
-    gap: 4px; /* ensures equal spacing */
+    gap: 2px; /* small gap for large arrays */
 }
 
 .bar-container div {
