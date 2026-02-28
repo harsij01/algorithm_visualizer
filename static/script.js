@@ -66,7 +66,6 @@ async function animateSteps(steps, speed = DEFAULT_SPEED) {
         };
 
     for (const step of steps) {
-        console.log(step);
         let arrayToRender = step.array;
 
         if (!arrayToRender) continue; // skip if undefined
@@ -118,6 +117,7 @@ async function animateSteps(steps, speed = DEFAULT_SPEED) {
         });
     }
 
+    // Make all the bars steelblue once the sorting is done
     if (finalArray) {
         updateBars(finalArray, { range: [0, finalArray.length - 1], color: "steelblue" });
     }
@@ -140,8 +140,7 @@ async function runVisual(array) {
         })
     });
 
-    const data = await res.json(); // must be declared BEFORE usage
-    console.log("Server response for visual:", data);
+    const data = await res.json();
 
     if (data.error) {
         alert(data.error);
@@ -150,8 +149,6 @@ async function runVisual(array) {
     }
 
     const speed = Number(document.getElementById("speedControl").value);
-
-    console.log("steps length:", data.steps.length);
 
     await animateSteps(data.steps, speed);
 
@@ -225,6 +222,7 @@ async function runSort(array) {
 function renderChart(results) {
     const ctx = document.getElementById("runtimeChart").getContext("2d");
 
+    // Remove the chart from previous execution
     if (runtimeChart) {
         runtimeChart.destroy();
     }
@@ -291,19 +289,9 @@ async function sendArray() {
     const array = input.split(/[\s,]+/).map(num => Number(num.trim())).filter(num => !isNaN(num));
     const mode = document.getElementById("modeSelect").value;
 
-    console.log("Run button clicked", { array, mode });
-
     if (array.length === 0) {
         alert("Please enter valid numbers.");
         return;
-    }
-
-    if (mode === "visual") {
-        document.getElementById("visualSection").style.display = "block";
-        document.getElementById("benchmarkSection").style.display = "none";
-    } else {
-        document.getElementById("visualSection").style.display = "none";
-        document.getElementById("benchmarkSection").style.display = "block";
     }
 
     await runSort(array);
