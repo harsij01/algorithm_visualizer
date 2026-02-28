@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, render_template
 from algorithms import bubble_sort, selection_sort, merge_sort, insertion_sort
 import time
+import os
 
 app = Flask(__name__)
 
@@ -108,4 +109,4 @@ def sort_handler():
     return jsonify(response)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
