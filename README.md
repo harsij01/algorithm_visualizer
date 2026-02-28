@@ -40,6 +40,8 @@ Each algorithm includes:
 - Time complexity analysis
 - Step tracking for animation
 
+---
+
 ## Features
 ### Visualization
 
@@ -62,6 +64,15 @@ Each algorithm includes:
     * Best case
     * Average case
     * Worst case
+
+### Backend Validation
+
+- Input validation for numeric arrays
+- Maximum array size protection
+- Mode and algorithm validation
+- Graceful error handling
+
+---
 
 ## Installation
 
