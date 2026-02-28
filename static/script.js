@@ -287,7 +287,6 @@ function renderAnalysis(results, arraySize) {
 async function sendArray() {
     const input = document.getElementById("arrayInput").value;
     const array = input.split(/[\s,]+/).map(num => Number(num.trim())).filter(num => !isNaN(num));
-    const mode = document.getElementById("modeSelect").value;
 
     if (array.length === 0) {
         alert("Please enter valid numbers.");
