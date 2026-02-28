@@ -88,19 +88,6 @@ Each algorithm includes:
 
 ---
 
-## Project Structure
-
-algorithm_visualizer/
-│
-├── app.py
-├── algorithms.py
-├── templates/
-│   └── sort.html
-├── static/
-│   ├── script.js
-│   └── style.css
-└── README.md
-
 ## Installation
 
 1. Clone this repository:
@@ -108,3 +95,35 @@ algorithm_visualizer/
 ```bash
 git clone https://github.com/harsij01/algorithm_visualizer
 cd algorithm_visualizer
+```
+
+2. Create a Virtual Environment (Recommended)
+
+Windows:
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+Mac/Linux:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Run the Application
+
+```bash
+python app.py
+```
+
+5. Open in Browser
+
+```bash
+http://127.0.0.1:5000
+```
