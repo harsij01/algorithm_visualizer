@@ -131,3 +131,5 @@ http://127.0.0.1:5000
 
 ### Benchmark Mode
 ![Benchmark Mode](screenshots/benchmark_mode.png)
+
+Live Demo: https://algorithm-visualizer-ngyt.onrender.com
