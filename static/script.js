@@ -19,11 +19,15 @@ function createBars(array) {
 
 function updateBars(array, highlight = {}) {
     const bars = document.getElementById("barContainer").children;
+    const maxValue = Math.max(...array);
+    const containerHeight = document.getElementById("barContainer").clientHeight;
 
     array.forEach((value, index) => {
         if (!bars[index]) return;  // safety check
     
-        bars[index].style.height = value * 3 + "px";
+        const scaledHeight = (value / maxValue) * containerHeight;
+        bars[index].style.height = scaledHeight + "px";
+        
         bars[index].style.backgroundColor = "steelblue";
 
         // Highlight range
