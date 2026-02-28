@@ -53,6 +53,16 @@ Each algorithm includes:
 * Adjustable animation speed
 * Supports custom and randomly generated arrays
 
+### Benchmark Mode
+
+* Compare two algorithms side-by-side
+* Runtime measurement (milliseconds)
+* Operation count comparison
+* Displays theoretical time complexities:
+    * Best case
+    * Average case
+    * Worst case
+
 ## Installation
 
 1. Clone this repository:
