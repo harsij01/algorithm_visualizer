@@ -349,10 +349,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Initialize on page load
     updateModeUI();
-});
 
-// Enable all Bootstrap tooltips
-const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-tooltipTriggerList.map(function (el) {
-  return new bootstrap.Tooltip(el);
+    // Enable all Bootstrap tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (el) {
+        return new bootstrap.Tooltip(el);
+    });
 });
