@@ -86,6 +86,21 @@ Each algorithm includes:
     * JavaScript (Vanilla)
     * Chart.js
 
+---
+
+## Project Structure
+
+algorithm_visualizer/
+│
+├── app.py
+├── algorithms.py
+├── templates/
+│   └── sort.html
+├── static/
+│   ├── script.js
+│   └── style.css
+└── README.md
+
 ## Installation
 
 1. Clone this repository:
