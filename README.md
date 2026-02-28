@@ -15,6 +15,18 @@ Supports **Bubble Sort**, **Selection Sort**, **Insertion Sort**, and **Merge So
 
 ---
 
+## Project Description
+
+This project was built to:
+- Understand how sorting algorithms work internally
+- Visualize algorithm behavior in real-time
+- Compare theoretical complexity vs actual runtime
+- Strengthen full-stack development skills
+
+The application supports both:
+- **Visual Mode** – animated step-by-step sorting
+- **Benchmark Mode** – runtime and operation comparison
+
 ## Installation
 
 1. Clone this repository:
