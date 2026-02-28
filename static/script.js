@@ -115,7 +115,7 @@ async function animateSteps(steps, speed = DEFAULT_SPEED) {
     }
 
     if (finalArray) {
-        updateBars(finalArray, { range: [0, finalArray.length - 1], color: "green" });
+        updateBars(finalArray, { range: [0, finalArray.length - 1], color: "steelblue" });
     }
 }
 
