@@ -1,3 +1,7 @@
+body {
+    padding: 2rem;
+}
+
 .bar-container {
     display: flex;
     align-items: flex-end;

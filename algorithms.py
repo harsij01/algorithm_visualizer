@@ -108,8 +108,6 @@ def merge_sort(arr, track_steps=True):
     op_count = 0 # count the number of steps taken to sort
 
     def _merge_sort(left, right):
-        nonlocal op_count
-        
         if left >= right:
             return
 
@@ -157,7 +155,7 @@ def merge_sort(arr, track_steps=True):
         # Copy back into original array
         for k in range(len(temp)):
             arr[left + k] = temp[k]
-            op_count += 1  # write operation
+            op_count += 1
 
             if track_steps:
                 steps.append({
