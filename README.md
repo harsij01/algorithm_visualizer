@@ -22,6 +22,9 @@ The application supports both:
 - **Visual Mode** – animated step-by-step sorting
 - **Benchmark Mode** – runtime and operation comparison
 
+### See it in Action
+![Demo Video](video/algorithm_visualizer_demo.mp4)
+
 ---
 
 ## Supported Algorithms
@@ -131,5 +134,3 @@ http://127.0.0.1:5000
 
 ### Benchmark Mode
 ![Benchmark Mode](screenshots/benchmark_mode.png)
-
-Live Demo: https://algorithm-visualizer-ngyt.onrender.com
