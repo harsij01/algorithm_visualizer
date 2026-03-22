@@ -23,7 +23,7 @@ The application supports both:
 - **Benchmark Mode** – runtime and operation comparison
 
 ### See it in Action
-![Demo Video](video/algorithm_visualizer_demo.mp4)
+[![Watch the video](https://img.youtube.com/vi/HxAScLT-6RY/0.jpg)](https://youtu.be/HxAScLT-6RY)
 
 ---
 
